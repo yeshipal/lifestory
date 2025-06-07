@@ -1,0 +1,155 @@
+/* General Reset and Base Styles */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background: #fff8f0;
+  color: #333;
+}
+
+header {
+  background: #8e2e2e;
+  color: #fff;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #ffdd57;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  text-align: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-text h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Intro Section */
+.intro {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.nav-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.card a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #8e2e2e;
+}
+
+.card p {
+  font-size: 0.95rem;
+}
+
+/* Quote Section */
+.quote {
+  background: #eee8dd;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-style: italic;
+  color: #555;
+}
+
+footer {
+  background: #4b2e2e;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+.scroll-cue {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #fff;
+  animation: bounce 1.5s infinite;
+}
+#escapePath {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 3s linear;
+}
+#escapePath.animate {
+  stroke-dashoffset: 0;
+}
+.story-panel {
+  margin: 1rem auto;
+  max-width: 700px;
+  padding: 1rem;
+  background-color: #fff;
+  border-left: 4px solid #007acc;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  font-size: 1rem;
+  line-height: 1.6;
+  display: none;
+}

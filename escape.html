@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escape Route Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+      margin: 0;
+      padding: 1rem;
+    }
+    .message {
+      margin: 1rem 0;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    svg {
+      width: 100%;
+      max-width: 1000px;
+      height: auto;
+    }
+    .circle {
+      cursor: pointer;
+      transition: fill 0.3s;
+    }
+    .circle:hover {
+      fill: orange;
+    }
+    .segment {
+      stroke: navy;
+      stroke-width: 3;
+      fill: none;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      transition: stroke-dashoffset 1s ease-out;
+    }
+    text {
+      font-size: 12px;
+      fill: black;
+    }
+    #storyPanel {
+      display: none;
+      margin: 1rem auto;
+      padding: 1rem;
+      max-width: 600px;
+      border: 1px solid #ccc;
+      background: #fff;
+      text-align: left;
+      font-size: 1rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      min-height: 80px;
+    }
+    #resetBtn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Escape Route Game</h1>
+  <p>Click the locations in the correct order to retrace the journey.</p>
+  <div class="message" id="message">Start your journey...</div>
+
+  <svg viewBox="0 0 1000 600" id="escapeMap">
+    <!-- Segments -->
+    <path id="segment1" class="segment" d="M900 100 L820 200" />
+    <path id="segment2" class="segment" d="M820 200 L760 240" />
+    <path id="segment3" class="segment" d="M760 240 L720 280" />
+    <path id="segment4" class="segment" d="M720 280 L500 200" />
+    <path id="segment5" class="segment" d="M500 200 L480 140" />
+    <path id="segment6" class="segment" d="M480 140 L520 160" />
+    <path id="segment7" class="segment" d="M520 160 L480 380" />
+    <path id="segment8" class="segment" d="M480 380 L480 140" />
+    <path id="segment9" class="segment" d="M480 140 L100 100" />
+    
+    <!-- Points -->
+    <circle class="circle" id="Aba Zhu Songpan" cx="900" cy="100" r="15" fill="red" />
+    <text x="900" y="90" text-anchor="middle">1. Aba Zhu Songpan</text>
+    <circle class="circle" id="Lhasa" cx="820" cy="200" r="15" fill="red" />
+    <text x="820" y="190" text-anchor="middle">2. Lhasa</text>
+    <circle class="circle" id="Zhangmu" cx="760" cy="240" r="15" fill="red" />
+    <text x="780" y="230" text-anchor="middle">3. Zhangmu</text>
+    <circle class="circle" id="Kathmandu" cx="720" cy="280" r="15" fill="red" />
+    <text x="720" y="270" text-anchor="middle">4. Kathmandu</text>
+    <circle class="circle" id="Majnu Ka Tilla" cx="500" cy="200" r="15" fill="red" />
+    <text x="500" y="190" text-anchor="middle">5. Majnu Ka Tilla</text>
+    <circle class="circle" id="Dharamshala" cx="480" cy="140" r="15" fill="red" />
+    <text x="480" y="130" text-anchor="middle">6. Dharamshala</text>
+    <circle class="circle" id="Mussoorie" cx="520" cy="160" r="15" fill="red" />
+    <text x="530" y="150" text-anchor="middle">7. Mussoorie</text>
+    <circle class="circle" id="Bengaluru" cx="480" cy="380" r="15" fill="red" />
+    <text x="480" y="370" text-anchor="middle">8. Bengaluru</text>
+    <circle class="circle" id="Buffalo, NY" cx="100" cy="100" r="15" fill="red" />
+    <text x="100" y="90" text-anchor="middle">9. Buffalo, NY</text>
+
+    <!-- Walker -->
+    <g id="walkerGroup" style="display: none;">
+      <image id="walker" href="images/walker.png" width="40" height="40" />
+      <animateMotion id="walkerMotion" dur="1.5s" fill="freeze" begin="indefinite">
+        <mpath id="walkerPath" xlink:href="#segment1" />
+      </animateMotion>
+    </g>
+  </svg>
+
+  <div id="storyPanel"></div>
+  <button id="resetBtn">🔄 Reset Game</button>
+
+  <script>
+    const order = [
+      "Aba Zhu Songpan",
+      "Lhasa",
+      "Zhangmu",
+      "Kathmandu",
+      "Majnu Ka Tilla",
+      "Dharamshala",
+      "Mussoorie",
+      "Bengaluru",
+      "Dharamshala",
+      "Buffalo, NY"
+    ];
+
+    const storyText = {
+      "Aba Zhu Songpan": "My journey began in Aba Zhu Songpan, a mountainous region in Tibet...",
+      "Lhasa": "We passed through Lhasa, the capital of Tibet. I didn’t realize this was the last time I'd see my homeland...",
+      "Zhangmu": "At Zhangmu, near the border, fear of being caught by Chinese guards gripped us...",
+      "Kathmandu": "We arrived in Kathmandu, Nepal, weary and relieved...",
+      "Majnu Ka Tilla": "In Delhi’s Majnu Ka Tilla, I encountered other escapees and was processed by the reception center...",
+      "Dharamshala": "Dharamshala welcomed me into the heart of the Tibetan community in exile...",
+      "Mussoorie": "In Mussoorie, I was enrolled in a Tibetan school, beginning my education in exile...",
+      "Bengaluru": "I pursued my engineering degree in Computer Science in Bengaluru, India...",
+      "Buffalo, NY": "Finally, I came to Buffalo, NY for my Master’s and PhD, researching CS education for displaced communities..."
+    };
+
+    let currentStep = 0;
+    let typing = false;
+
+    const messageEl = document.getElementById("message");
+    const walker = document.getElementById("walker");
+    const motion = document.getElementById("walkerMotion");
+    const storyPanel = document.getElementById("storyPanel");
+    const walkerGroup = document.getElementById("walkerGroup");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function typeText(element, text) {
+      element.textContent = "";
+      let i = 0;
+      typing = true;
+      const interval = setInterval(() => {
+        element.textContent += text[i];
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          typing = false;
+        }
+      }, 30);
+    }
+
+    function resetGame() {
+      currentStep = 0;
+      messageEl.textContent = "Start your journey...";
+      walkerGroup.style.display = "none";
+      storyPanel.style.display = "none";
+      typing = false;
+      document.querySelectorAll(".circle").forEach(c => c.setAttribute("fill", "red"));
+      document.querySelectorAll(".segment").forEach(s => s.style.strokeDashoffset = "1000");
+    }
+
+    order.forEach((location, index) => {
+      const circle = document.getElementById(location);
+      circle.addEventListener("click", () => {
+        if (typing) return; // Prevent clicks during typing
+        if (location === order[currentStep]) {
+          circle.setAttribute("fill", "green");
+
+          if (currentStep === 0) {
+            const startCircle = document.getElementById("Aba Zhu Songpan");
+  const startX = parseFloat(startCircle.getAttribute("cx"));
+  const startY = parseFloat(startCircle.getAttribute("cy"));
+  const walkerGroup = document.getElementById("walkerGroup");
+  walkerGroup.setAttribute("transform", `translate(${startX - 20}, ${startY - 20})`);
+  walkerGroup.style.display = "block";
+}
+
+if (currentStep > 0) {
+          const segment = document.getElementById(`segment${currentStep}`);
+          if (segment) {
+            segment.style.strokeDashoffset = "0";
+
+            // Update path reference dynamically
+            const walkerPath = document.getElementById("walkerPath");
+            walkerPath.setAttribute("xlink:href", `#segment${currentStep}`);
+
+            const motion = document.getElementById("walkerMotion");
+            motion.beginElement();
+            }
+          }
+
+          storyPanel.style.display = "block";
+          typeText(storyPanel, storyText[location] || "");
+
+          currentStep++;
+          if (currentStep < order.length) {
+            messageEl.textContent = `Good job! Next: ${order[currentStep]}`;
+          } else {
+            messageEl.textContent = "🎉 You've completed the journey!";
+          }
+        } else {
+          messageEl.textContent = "Oops! That's not the next stop. Try again.";
+        }
+      });
+    });
+
+    resetBtn.addEventListener("click", resetGame);
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From Exile to Empowerment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="homepage">
+    <section class="hero">
+      <div class="scroll-cue">&#8595;</div>
+      <img src="images/hero-tibet.jpg" alt="Mountains and Tibetan flag" />
+      <div class="hero-text">
+        <h2>A Journey Through Story, Struggle, and Code</h2>
+        <p>Explore the story of a Tibetan refugee who crossed borders, built digital futures, and empowered his community through computing.</p>
+      </div>
+    </section>
+
+    <section class="intro">
+      <h3>Where will you begin?</h3>
+      <div class="nav-cards">
+        <div class="card">
+          <a href="escape.html">
+            <h4>Escape</h4>
+            <p>The perilous journey from Tibet across the Himalayas.</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="exile.html">
+            <h4>Exile Life</h4>
+            <p>Growing up in a refugee school and forging an identity in exile.</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="activism.html">
+            <h4>Activism</h4>
+            <p>Standing up for justice through journalism and protest.</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="future.html">
+            <h4>Future</h4>
+            <p>Creating meaningful CS education for Tibetan youth.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote">
+      <blockquote>
+        “Our struggle must remain alive through knowledge, culture, and digital courage.”<br />
+        — His Holiness the 14th Dalai Lama
+      </blockquote>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    fetch('components/header.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('site-header').innerHTML = data;
+      });
+    fetch('components/footer.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('site-footer').innerHTML = data;
+      });
+  </script>
+</body>
+</html>
