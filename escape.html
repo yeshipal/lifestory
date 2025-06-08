@@ -7,28 +7,69 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      text-align: center;
+      background: url('images/world-map.png') no-repeat center center fixed;
+      background-size: cover;
       margin: 0;
       padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Background overlay for readability */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      z-index: -1;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.75);
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    h1, p {
+      text-align: center;
     }
     .message {
       margin: 1rem 0;
       font-size: 1.2rem;
       font-weight: bold;
     }
+
     svg {
       width: 100%;
       max-width: 1000px;
       height: auto;
     }
+
     .circle {
       cursor: pointer;
       transition: fill 0.3s;
     }
+
     .circle:hover {
       fill: orange;
     }
+
+    .circle.active {
+      animation: pulse 1.5s infinite;
+      stroke: #ff9900;
+      stroke-width: 3;
+    }
+
+    @keyframes pulse {
+      0% { r: 15; opacity: 1; }
+      50% { r: 18; opacity: 0.6; }
+      100% { r: 15; opacity: 1; }
+    }
+
     .segment {
       stroke: navy;
       stroke-width: 3;
@@ -37,38 +78,57 @@
       stroke-dashoffset: 1000;
       transition: stroke-dashoffset 1s ease-out;
     }
-    text {
-      font-size: 12px;
-      fill: black;
+
+    .story-image {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
     }
     #storyPanel {
       display: none;
-      margin: 1rem auto;
+      margin: auto;
       padding: 1rem;
       max-width: 600px;
-      border: 1px solid #ccc;
       background: #fff;
-      text-align: left;
+      border-left: 4px solid #2d87f0;
       font-size: 1rem;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      min-height: 80px;
+      line-height: 1.6;
+      text-align: left;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease-in-out;
     }
+
     #resetBtn {
       margin-top: 1rem;
-      padding: 0.5rem 1rem;
       font-size: 1rem;
+      padding: 0.5rem 1.2rem;
+      background-color: #2d87f0;
+      color: #fff;
+      border: none;
       cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    #resetBtn:hover {
+      background-color: #1c66d6;
+    }
+
+    @media (max-width: 600px) {
+      svg, #storyPanel {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="container">
   <h1>Escape Route Game</h1>
   <p>Click the locations in the correct order to retrace the journey.</p>
   <div class="message" id="message">Start your journey...</div>
 
-  <svg viewBox="0 0 1000 600" id="escapeMap">
-    <!-- Segments -->
+  <svg viewBox="0 0 1000 400" id="escapeMap">
+    <!-- Paths and Points (same as before, no change) -->
     <path id="segment1" class="segment" d="M900 100 L820 200" />
     <path id="segment2" class="segment" d="M820 200 L760 240" />
     <path id="segment3" class="segment" d="M760 240 L720 280" />
@@ -78,8 +138,8 @@
     <path id="segment7" class="segment" d="M520 160 L480 380" />
     <path id="segment8" class="segment" d="M480 380 L480 140" />
     <path id="segment9" class="segment" d="M480 140 L100 100" />
-    
-    <!-- Points -->
+
+    <!-- Circles -->
     <circle class="circle" id="Aba Zhu Songpan" cx="900" cy="100" r="15" fill="red" />
     <text x="900" y="90" text-anchor="middle">1. Aba Zhu Songpan</text>
     <circle class="circle" id="Lhasa" cx="820" cy="200" r="15" fill="red" />
@@ -102,110 +162,134 @@
     <!-- Walker -->
     <g id="walkerGroup" style="display: none;">
       <image id="walker" href="images/walker.png" width="40" height="40" />
-      <animateMotion id="walkerMotion" dur="1.5s" fill="freeze" begin="indefinite">
-        <mpath id="walkerPath" xlink:href="#segment1" />
+      <animateMotion id="walkerMotion" begin="indefinite" dur="1.5s" fill="freeze" keySplines="0.25 0.1 0.25 1" keyTimes="0;1" calcMode="spline">
+        <mpath xlink:href="#segment1" />
       </animateMotion>
     </g>
   </svg>
 
   <div id="storyPanel"></div>
-  <button id="resetBtn">🔄 Reset Game</button>
+  <button id="resetBtn" aria-label="Reset the game">🔄 Reset Game</button>
+  </div>
 
   <script>
     const order = [
-      "Aba Zhu Songpan",
-      "Lhasa",
-      "Zhangmu",
-      "Kathmandu",
-      "Majnu Ka Tilla",
-      "Dharamshala",
-      "Mussoorie",
-      "Bengaluru",
-      "Dharamshala",
-      "Buffalo, NY"
+      "Aba Zhu Songpan", "Lhasa", "Zhangmu", "Kathmandu",
+      "Majnu Ka Tilla", "Dharamshala", "Mussoorie", "Bengaluru",
+      "Dharamshala", "Buffalo, NY"
     ];
 
     const storyText = {
-      "Aba Zhu Songpan": "My journey began in Aba Zhu Songpan, a mountainous region in Tibet...",
-      "Lhasa": "We passed through Lhasa, the capital of Tibet. I didn’t realize this was the last time I'd see my homeland...",
-      "Zhangmu": "At Zhangmu, near the border, fear of being caught by Chinese guards gripped us...",
-      "Kathmandu": "We arrived in Kathmandu, Nepal, weary and relieved...",
-      "Majnu Ka Tilla": "In Delhi’s Majnu Ka Tilla, I encountered other escapees and was processed by the reception center...",
-      "Dharamshala": "Dharamshala welcomed me into the heart of the Tibetan community in exile...",
-      "Mussoorie": "In Mussoorie, I was enrolled in a Tibetan school, beginning my education in exile...",
-      "Bengaluru": "I pursued my engineering degree in Computer Science in Bengaluru, India...",
-      "Buffalo, NY": "Finally, I came to Buffalo, NY for my Master’s and PhD, researching CS education for displaced communities..."
+      "Aba Zhu Songpan": `
+        <p>My journey began in Aba, a remote region of Eastern Tibet, to a semi-nomadic family. Life was simple, but the shadows of political suppression under Chinese rule loomed large. Like many families fearing the erasure of Tibetan identity, my father made the heart-wrenching decision to send me to exile at age seven. I didn’t understand it fully then—but it was the beginning of a journey that thousands of Tibetans have made in search of freedom and education.</p>
+          <img class="story-image" src="images/aba-temple.jpg" alt="Aba Zhu Songpan">
+      `,
+      "Lhasa": `
+        <p>We passed through Lhasa—the spiritual and political capital of Tibet. Under Chinese occupation, it no longer felt like a free homeland. I remember being told not to speak too much, not to draw attention. Lhasa today remains a symbol of Tibetan resistance and longing. For the diaspora, it's both a beacon of cultural pride and a reminder of what we’ve lost.</p>
+        <img src="images/lhasa-tibet.jpg" alt="Lhasa" class="story-image">
+      `,
+      "Zhangmu": `
+        <p>At Dram (Zhangmu), we reached the Tibetan-Nepalese border. It was here, hidden in the night, that I and many others escaped. Every step was filled with fear of being captured. Some never made it. Zhangmu stands for the desperation and courage that define the Tibetan exile journey. For students today, this is where our people risked everything for freedom.</p>
+        <img src="images/Dram.jpg" alt="Zhangmu" class="story-image">
+      `,
+      "Kathmandu": `
+        <p>We arrived in Kathmandu exhausted and frightened. But Nepal offered safety—for a moment. At the Tibetan Reception Centre, we waited with uncertainty, hoping for the chance to continue to India. Thousands of Tibetan children, like me, have passed through Kathmandu, making it a key gateway of exile. It was the first glimpse of a freer life.</p>
+        <img src="images/nepal.jpg" alt="Kathmandu" class="story-image">
+      `,
+      "Majnu Ka Tilla": `
+        <p>In Delhi, we were processed at the Tibetan Reception Centre in Majnu Ka Tilla. This Tibetan settlement is more than a neighborhood—it's a cultural stronghold. Here, the Indian government and the exile administration coordinated to shelter and educate refugees. It was my first sense of a community in exile—one that embraces, supports, and rebuilds.</p>
+        <img src="images/majnukatilla.jpg" alt="Majnu Ka Tilla" class="story-image">
+      `,
+      "Dharamshala-1": `
+        <p>Dharamshala—home of the Tibetan Government-in-Exile and His Holiness the Dalai Lama—welcomed me. As a child, I didn't grasp the full weight of this place. But it gave me direction. Dharamshala became the heart of Tibetan freedom efforts and the base for nurturing thousands of children like me. It’s a place where exile became mission.</p>
+        <img src="images/mcleod.jpg" alt="Dharamshala" class="story-image">
+      `,
+      "Mussoorie": `
+        <p>I was raised and educated in Tibetan Homes School, Mussoorie—one of the first schools founded in exile. Here, I grew up learning modern education alongside our language, history, and values. Living in group homes, we called our caretakers "Ama" and "Aba." This school created not just educated children, but future custodians of Tibetan identity.</p>
+        <img src="images/ths.jpg" alt="Mussoorie" class="story-image">
+      `,
+      "Bengaluru": `
+        <p>For my college studies, I moved to Bengaluru. It was the first time I lived among mostly non-Tibetans. I studied Computer Science and Engineering and learned how to express our stories digitally. It was in Bengaluru that I created <i>The Tibetan Journal</i>, to bring Tibetan voices to the world. Education became a tool for advocacy and innovation.</p>
+        <img src="images/bengaluru.jpg" alt="Bengaluru" class="story-image">
+      `,
+      "Dharamshala-2": `
+        <p>I returned to Dharamshala—this time not as a child seeking refuge, but as a contributor to a movement grounded in justice and cultural survival. As part of the Tibetan Government-in-Exile, I led the development of the Central Tibetan Database, a crucial system to strengthen the infrastructure of our diaspora. Since 1959, this government has served not merely as an administrative body, but as the political and spiritual heartbeat of our community in exile. Through its coordinated efforts, Tibetan settlements across India and Nepal were established—complete with schools, health centers, and monasteries—to ensure that our language, culture, and national identity could be sustained despite displacement. These institutions are not just support systems—they are acts of resistance against the erasure of our identity under Chinese occupation. Every Tibetan, regardless of where they live, has a role in sustaining this vision. Contributing to the Tibetan Government-in-Exile is not just service; it is a responsibility to our collective future and our rightful struggle for justice.</p>
+        <img src="images/cta.jpg" alt="Dharamshala - Return" class="story-image">
+      `,
+      "Buffalo, NY": `
+        <p>My journey brought me to Buffalo, New York, for my Master’s and PhD. Now, I research computer science education for displaced communities—especially Tibetan youth. This final stop represents not just physical migration, but the transformation of pain into purpose. In teaching and coding, I honor our history and shape a new future.</p>
+        <img src="images/buffalo.jpg" alt="Buffalo, NY" class="story-image"">
+      `
     };
 
+
     let currentStep = 0;
-    let typing = false;
+    let typewriterActive = false;
+    let typingInterval = null;
 
     const messageEl = document.getElementById("message");
     const walker = document.getElementById("walker");
+    const walkerGroup = document.getElementById("walkerGroup");
     const motion = document.getElementById("walkerMotion");
     const storyPanel = document.getElementById("storyPanel");
-    const walkerGroup = document.getElementById("walkerGroup");
-    const resetBtn = document.getElementById("resetBtn");
 
-    function typeText(element, text) {
-      element.textContent = "";
+    function typeHTML(element, html, speed = 5) {
+      if (typingInterval) clearInterval(typingInterval);
+      element.innerHTML = "";
       let i = 0;
-      typing = true;
-      const interval = setInterval(() => {
-        element.textContent += text[i];
+      typingInterval = setInterval(() => {
+        element.innerHTML = html.slice(0, i);
         i++;
-        if (i >= text.length) {
-          clearInterval(interval);
-          typing = false;
+        if (i > html.length) {
+          clearInterval(typingInterval);
+          typingInterval = null;
+          element.innerHTML = html; // Final correction
         }
-      }, 30);
+      }, speed);
     }
 
     function resetGame() {
       currentStep = 0;
+      typewriterActive = false;
       messageEl.textContent = "Start your journey...";
       walkerGroup.style.display = "none";
       storyPanel.style.display = "none";
-      typing = false;
-      document.querySelectorAll(".circle").forEach(c => c.setAttribute("fill", "red"));
+      document.querySelectorAll(".circle").forEach(c => {
+        c.setAttribute("fill", "red");
+        c.classList.remove("active");
+      });
       document.querySelectorAll(".segment").forEach(s => s.style.strokeDashoffset = "1000");
+      document.getElementById(order[0]).classList.add("active");
     }
 
+    document.getElementById("resetBtn").addEventListener("click", resetGame);
+
+    // Setup click handlers
     order.forEach((location, index) => {
       const circle = document.getElementById(location);
+      if (index === 0) circle.classList.add("active");
+
       circle.addEventListener("click", () => {
-        if (typing) return; // Prevent clicks during typing
         if (location === order[currentStep]) {
           circle.setAttribute("fill", "green");
+          circle.classList.remove("active");
 
-          if (currentStep === 0) {
-            const startCircle = document.getElementById("Aba Zhu Songpan");
-  const startX = parseFloat(startCircle.getAttribute("cx"));
-  const startY = parseFloat(startCircle.getAttribute("cy"));
-  const walkerGroup = document.getElementById("walkerGroup");
-  walkerGroup.setAttribute("transform", `translate(${startX - 20}, ${startY - 20})`);
-  walkerGroup.style.display = "block";
-}
-
-if (currentStep > 0) {
-          const segment = document.getElementById(`segment${currentStep}`);
-          if (segment) {
+          if (currentStep > 0) {
+            const segment = document.getElementById(`segment${currentStep}`);
             segment.style.strokeDashoffset = "0";
-
-            // Update path reference dynamically
-            const walkerPath = document.getElementById("walkerPath");
-            walkerPath.setAttribute("xlink:href", `#segment${currentStep}`);
-
-            const motion = document.getElementById("walkerMotion");
+            motion.innerHTML = `<mpath xlink:href="#segment${currentStep}" />`;
             motion.beginElement();
-            }
           }
 
           storyPanel.style.display = "block";
-          typeText(storyPanel, storyText[location] || "");
-
+          let storyKey = location;
+          if (location === "Dharamshala") {
+            storyKey = (currentStep === 5) ? "Dharamshala-1" : "Dharamshala-2";
+          }
+          typeHTML(storyPanel, storyText[storyKey] || "");
           currentStep++;
           if (currentStep < order.length) {
+            document.getElementById(order[currentStep]).classList.add("active");
             messageEl.textContent = `Good job! Next: ${order[currentStep]}`;
           } else {
             messageEl.textContent = "🎉 You've completed the journey!";
@@ -215,8 +299,6 @@ if (currentStep > 0) {
         }
       });
     });
-
-    resetBtn.addEventListener("click", resetGame);
   </script>
 </body>
 </html>
