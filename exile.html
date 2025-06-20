@@ -5,23 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Life in Exile</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       font-family: 'Georgia', serif;
       scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
       background: #fdfdfd;
       color: #333;
       line-height: 1.6;
     }
     section {
+      scroll-snap-align: start;
       min-height: 100vh;
       padding: 4rem 10vw;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      border-bottom: 1px solid #ccc;
     }
     .hero {
-      background: url('images/exile-background.png') center/cover no-repeat;
+      background: url('images/exile.png') center/cover no-repeat;
       color: white;
       text-shadow: 0 2px 4px rgba(0,0,0,0.7);
       text-align: center;
@@ -49,11 +53,12 @@
       overflow-x: auto;
       font-size: 0.95rem;
     }
-    .reflect {
-      background: #fff8dc;
-      padding: 1rem;
+    .quote {
+      font-style: italic;
       margin-top: 1rem;
-      border-left: 4px solid #ffc107;
+      padding-left: 1rem;
+      border-left: 4px solid #ccc;
+      color: #555;
     }
     textarea {
       width: 100%;
@@ -71,14 +76,14 @@
 <body>
   <section class="hero">
     <h1>LIFE IN EXILE</h1>
-    <p>In 1997, I left my homeland. This is the journey that shaped who I am today.</p>
+    <p>In 1997, I left my homeland. This is the journey that shaped who I am today—and continues to shape my purpose.</p>
   </section>
 
   <section>
     <h2>The Journey</h2>
-    <p>
-      I crossed from Tibet into Nepal, and then into India, where I would begin a new life in exile.
-    </p>
+    <p>At the age of seven, I left Tibet with my family, crossing into Nepal and then arriving in India. Our journey, like many Tibetan families, was filled with uncertainty but guided by hope. It was not just a move across geography; it was a crossing into exile—a beginning of life without a country, but not without a cause.</p>
+    <p>After the Chinese occupation of Tibet and the 1959 uprising, over 80,000 Tibetans fled into exile following His Holiness the Dalai Lama. Families crossed icy mountains and dangerous terrains. Some didn’t make it. Those who did carried nothing but their memories, language, and faith. These journeys are part of every Tibetan exile’s collective memory.</p>
+    <div class="quote">“We Tibetans lost our land, but not our will to be Tibetan.” — Common exile saying</div>
     <div class="code-box">
 <pre><code>let origin = "Tibet";
 let route = ["Tibet", "Nepal", "India"];
@@ -88,10 +93,10 @@ console.log("We reached " + destination);</code></pre>
   </section>
 
   <section>
-    <h2>Tibetan Homes School</h2>
-    <p>
-      In Mussoorie, I went to school where Tibetan culture was preserved through education.
-    </p>
+    <h2>School in Exile</h2>
+    <p>My new beginning was shaped inside the walls of Tibetan Homes School in Mussoorie. There, I received not just education in math and science—but daily reminders of who I was and who we were as a people in exile. Morning assemblies included the Tibetan national anthem. We celebrated Losar, read Tibetan poetry, and recited the teachings of His Holiness the Dalai Lama.</p>
+    <p>This was no ordinary school. It was part of a nationwide effort by the Central Tibetan Administration (CTA) to preserve our identity through education. Over 60 schools in exile were supported by the Department of Education to uphold a dual mission: prepare us for the modern world while protecting our language, values, and culture from erasure.</p>
+    <div class="quote">“Education is the key to our survival.” — H.H. the Dalai Lama</div>
     <div class="code-box">
 <pre><code>let dailyRoutine = ["Wake up", "Prayer", "Class", "Lunch", "Study", "Sleep"];
 dailyRoutine.forEach(activity => console.log(activity));</code></pre>
@@ -100,9 +105,9 @@ dailyRoutine.forEach(activity => console.log(activity));</code></pre>
 
   <section>
     <h2>Cultural Identity</h2>
-    <p>
-      Our festivals, rituals, and language were forms of resistance. Every Losar, we felt connected to home.
-    </p>
+    <p>In exile, our culture was not background—it was the center of everything. Rituals, festivals, language, and moral teachings became tools of resistance. I remember how deeply I felt the Losar prayers, the chants from the monasteries, and the pride of writing Tibetan script correctly.</p>
+    <p>This was mirrored across every settlement, where monasteries worked side by side with schools to protect our way of life. Through the Department of Religion and Culture, the CTA ensured that spiritual practice remained woven into daily life. It reminded us that while we were far from Tibet, we were never far from being Tibetan.</p>
+    <div class="quote">“Culture is our greatest weapon against forgetting.”</div>
     <div class="code-box">
 <pre><code>let day = "Losar";
 if (day === "Losar") {
@@ -113,9 +118,8 @@ if (day === "Losar") {
 
   <section>
     <h2>Preserving Our Identity</h2>
-    <p>
-      From CTA schools to monasteries, our community worked to sustain who we are.
-    </p>
+    <p>As our lives unfolded in exile, every institution we built—schools, monasteries, community centers—served one goal: preserving identity. We had no nation-state, but we had the tools to act like one. Our teachers, leaders, and monks became custodians of continuity.</p>
+    <p>I often think about the role these places played—not just in shaping me, but in shaping our collective purpose. They weren’t perfect, but they were powerful. They held together a nation without borders through language, memory, and shared vision.</p>
     <div class="code-box">
 <pre><code>let institutions = ["THS", "TCV", "Sambhota", "Namgyal Monastery"];
 for (let i = 0; i < institutions.length; i++) {
@@ -126,9 +130,9 @@ for (let i = 0; i < institutions.length; i++) {
 
   <section>
     <h2>From Exile to Empowerment</h2>
-    <p>
-      I use computer science to tell our stories and build tools that preserve our identity.
-    </p>
+    <p>Years later, that foundation led me to computer science—not as an escape, but as a return. I use code to tell our stories, preserve our culture, and create new spaces for Tibetan youth to connect with who they are through technology. This project, this program, this page—are part of that mission.</p>
+    <p>Just as exile gave us a cause, technology gives us a platform. I believe computing can be more than a skill. It can be a tool for advocacy, cultural preservation, and collective memory.</p>
+    <div class="quote">“Exile gave me a purpose. Technology gave me a voice.”</div>
     <div class="code-box">
 <pre><code>function preserveCulture(method) {
   console.log("Using " + method + " to empower Tibetan identity.");
@@ -140,9 +144,7 @@ preserveCulture("storytelling");</code></pre>
 
   <section>
     <h2>Student Reflection</h2>
-    <p>
-      What part of this story connects with you? How can you use code to express your identity?
-    </p>
+    <p>Now it’s your turn. What part of this story connects with you? Do you or your family have a story of exile, migration, or cultural resilience? How can you use computing to carry that forward?</p>
     <textarea placeholder="Write your reflection here..."></textarea>
   </section>
 </body>
