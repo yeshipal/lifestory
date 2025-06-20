@@ -3,12 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-</head>
-<body>
-  <h2>The Journey Route</h2>
-  <div id="map"></div>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <title>Escape Route Game</title>
   <style>
     body {
@@ -125,7 +119,6 @@
         width: 100%;
       }
     }
-     #map { height: 600px; }
   </style>
 </head>
 <body>
@@ -307,36 +300,6 @@
         }
       });
     });
-    
-    const map = L.map('map').setView([30, 85], 3);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    const stops = [
-      { name: "1. Aba Zhu Songpan", coords: [32.64, 103.58] },
-      { name: "2. Lhasa", coords: [29.65, 91.13] },
-      { name: "3. Zhangmu", coords: [28.00, 86.00] },
-      { name: "4. Kathmandu", coords: [27.71, 85.32] },
-      { name: "5. Majnu Ka Tilla", coords: [28.69, 77.22] },
-      { name: "6. Dharamshala", coords: [32.22, 76.32] },
-      { name: "7. Mussoorie", coords: [30.45, 78.07] },
-      { name: "8. Bengaluru", coords: [12.97, 77.59] },
-      { name: "9. Dharamshala (Return)", coords: [32.22, 76.32] },
-      { name: "10. Buffalo, NY", coords: [42.89, -78.87] }
-    ];
-
-    const pathCoords = [];
-
-    stops.forEach(stop => {
-      L.marker(stop.coords)
-        .addTo(map)
-        .bindPopup(stop.name);
-      pathCoords.push(stop.coords);
-    });
-
-    L.polyline(pathCoords, { color: 'red' }).addTo(map);
   </script>
 </body>
 </html>
