@@ -71,6 +71,40 @@
       border: 1px solid #ccc;
       resize: vertical;
     }
+    .video-bg-section {
+  position: relative;
+  min-height: 100vh;
+  scroll-snap-align: start;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 10vw;
+  color: white;
+}
+  
+  .bg-video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.5); /* Darken for readability */
+  }
+  
+  .video-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+  
+  .video-content h2 {
+    color: #fff;
+}
   </style>
 </head>
 <body>
@@ -92,14 +126,25 @@ console.log("We reached " + destination);</code></pre>
     </div>
   </section>
 
-  <section>
-    <h2>School in Exile</h2>
-    <p>My new beginning was shaped inside the walls of Tibetan Homes School in Mussoorie. There, I received not just education in math and science—but daily reminders of who I was and who we were as a people in exile. Morning assemblies included the Tibetan national anthem. We celebrated Losar, read Tibetan poetry, and recited the teachings of His Holiness the Dalai Lama.</p>
-    <p>This was no ordinary school. It was part of a nationwide effort by the Central Tibetan Administration (CTA) to preserve our identity through education. Over 60 schools in exile were supported by the Department of Education to uphold a dual mission: prepare us for the modern world while protecting our language, values, and culture from erasure.</p>
-    <div class="quote">“Education is the key to our survival.” — H.H. the Dalai Lama</div>
-    <div class="code-box">
-<pre><code>let dailyRoutine = ["Wake up", "Prayer", "Class", "Lunch", "Study", "Sleep"];
-dailyRoutine.forEach(activity => console.log(activity));</code></pre>
+  <section class="video-bg-section">
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="ths-school.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+    <div class="video-content">
+      <h2>School in Exile</h2>
+      <p>
+        My new beginning was shaped inside the walls of Tibetan Homes School in Mussoorie. There, I received not just education in math and science—but daily reminders of who I was and who we were as a people in exile. Morning assemblies included the Tibetan national anthem. We celebrated Losar, read Tibetan poetry, and recited the teachings of His Holiness the Dalai Lama.
+      </p>
+      <p>
+        This was no ordinary school. It was part of a nationwide effort by the Central Tibetan Administration (CTA) to preserve our identity through education. Over 60 schools in exile were supported by the Department of Education to uphold a dual mission: prepare us for the modern world while protecting our language, values, and culture from erasure.
+      </p>
+      <div class="quote">“Education is the key to our survival.” — H.H. the Dalai Lama</div>
+      <div class="code-box">
+  <pre><code>let dailyRoutine = ["Wake up", "Prayer", "Class", "Lunch", "Study", "Sleep"];
+  dailyRoutine.forEach(activity => console.log(activity));</code></pre>
+      </div>
     </div>
   </section>
 
