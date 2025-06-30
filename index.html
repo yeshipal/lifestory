@@ -330,6 +330,18 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener("click", function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute("href"));
+    const offset = 80; // Adjust this to your navbar height
+
+    window.scrollTo({
+      top: target.offsetTop - offset,
+      behavior: "smooth"
+    });
+  });
+});
     AOS.init();
     window.addEventListener('scroll', () => {
       const scrollProgress = document.getElementById('progress-bar');
