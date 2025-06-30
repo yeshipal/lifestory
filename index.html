@@ -17,7 +17,7 @@
     }
     section {
       min-height: 100vh;
-      padding: 60px 20px;
+      padding: 100px 20px 60px;
       box-sizing: border-box;
       scroll-margin-top: 60px;
     }
@@ -318,7 +318,7 @@
         <div id="escape-map"></div>
       </div>
       <div style="flex: 1 1 400px;">
-        <h2>Escape Journey</h2>
+        <h2>My Journey on the Map</h2>
         <p><em>“Some journeys begin with goodbye.”</em></p>
         <div id="story-text" style="font-size: 1rem; line-height: 1.6;"></div>
       </div>
@@ -330,18 +330,6 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    const offset = 80; // Adjust this to your navbar height
-
-    window.scrollTo({
-      top: target.offsetTop - offset,
-      behavior: "smooth"
-    });
-  });
-});
     AOS.init();
     window.addEventListener('scroll', () => {
       const scrollProgress = document.getElementById('progress-bar');
