@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mission Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
+  <script src="gameConfig.js" defer></script>
+  <script src="mapRenderer.js" defer></script>
+  <script src="schoolHub.js" defer></script>
+  <script src="monasteryHub.js" defer></script>
+  <script src="universityHub.js" defer></script>
+  <script src="communityHub.js" defer></script>
+  <script src="CTAHub.js" defer></script>
+  <script src="monasteryQuiz.js" defer></script>
+  <script src="communityQuiz.js" defer></script>
+  <script src="quizzes.js" defer></script>
+  <script src="universityQuiz.js" defer></script>
+  <script src="CTAPosterTask.js" defer></script>
+  <script src="CTALetterTask.js" defer></script>
+  <script src="playerMovement.js" defer></script>
+  <script src="mainGame.js" defer></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fdfdfd;
+    }
+    .nav-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #007BFF;
+    }
+    nav .nav-links {
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+    }
+    nav .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    nav .nav-links a:hover {
+      color: #007BFF;
+    }
+
+    .page-content {
+      padding: 120px 10vw 60px;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 4rem;
+      background: linear-gradient(to right, #f2f2f2, #e8f0ff);
+      font-size: 0.9rem;
+      color: #555;
+      border-top: 1px solid #ddd;
+    }
+    footer a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+  <div class="nav-container">
+    <div class="logo">A Tibetan Mission Game</div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Content -->
+  <div class="page-content">
+   <h1>About the Game</h1>
+<p><strong>Journey of the Snowland</strong> is an educational adventure game inspired by the lived experiences of Tibetan youth in exile. Through storytelling, puzzles, and interactive tasks, players step into the shoes of a young character navigating life in a Tibetan settlement—visiting key places like the school, monastery, community center, and university.</p>
+
+<p>Each location offers a mission that blends cultural knowledge with modern skills. Whether it’s answering a wisdom quiz in the monastery, creating a digital poster for advocacy, or helping out in the community, players discover what it means to grow, learn, and contribute while in exile.</p>
+
+<h2>🎮 How to Play</h2>
+<ul>
+  <li>Use your arrow keys (← ↑ ↓ →) or WASD to move around the map.</li>
+  <li>Walk into buildings like the <strong>school</strong>, <strong>monastery</strong>, <strong>university</strong>, and <strong>community center</strong> to unlock story-based tasks.</li>
+  <li>Complete mini-games, quizzes, and creative challenges to earn badges.</li>
+  <li>Once you’ve visited all key buildings, head to the <strong>CTA office</strong> for a final mission that brings everything together.</li>
+</ul>
+
+<p>This game is designed for students to explore Tibetan identity, civic responsibility, and the power of knowledge—all while having fun.</p>
+
+    <div id="game-canvas"></div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Yeshi Paljor. Created with care to honor Tibetan resilience. Visit <a href="https://yeshipal.github.io">yeshipal.github.io</a> for more.
+  </footer>
+
+</body>
+</html>

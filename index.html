@@ -3,72 +3,460 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A Glance at My Life</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Yeshi’s Life Journey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
+    }
+    section {
+      min-height: 100vh;
+      padding: 60px 20px;
+      box-sizing: border-box;
+      scroll-margin-top: 60px;
+    }
+    .section-padded {
+      padding: 60px 10vw 60px;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav a:hover {
+      color: #007BFF;
+      text-decoration: underline;
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      background: #007BFF;
+      width: 0%;
+      z-index: 1001;
+      transition: width 0.2s ease;
+    }
+    #dice-intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #f9f9f9, #f1f7ff);
+      border-radius: 10px;
+    }
+     .dice-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .dice-button {
+      font-size: 80px;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+      transition: transform 0.3s ease;
+    }
+    .dice-button:hover, .nav-card:hover {
+      box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+    }
+    .dice-button:active {
+      transform: scale(0.95) rotate(45deg);
+    }
+    .nav-card {
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      width: 180px;
+      text-align: center;
+    }
+    .nav-card a {
+      text-decoration: none;
+      color: #007BFF;
+      font-weight: bold;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .result-icon {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    .school-bg {
+      background-image: url('images/exile-background.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+      color: white;
+    }
+
+    .school-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3); /* dark overlay */
+      z-index: 0;
+    }
+
+    .school-bg > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .finding-way-bg {
+      background-image: url('images/escape-hero.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+      color: white;
+    }
+
+    .finding-way-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .finding-way-bg > * {
+      position: relative;
+      z-index: 1;
+    }
+    #escape-map {
+      height: 500px;
+      width: 100%;
+      margin-bottom: 2rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 4rem;
+      background-color: #f0f0f0;
+      font-size: 0.9rem;
+      color: #555;
+      border-top: 1px solid #ddd;
+      background: linear-gradient(to right, #f2f2f2, #e8f0ff);
+    }
+    footer a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
 </head>
 <body>
-  <div id="site-header"></div>
-  <main class="homepage">
-    <section class="hero">
-      <div class="scroll-cue">&#8595;</div>
-      <img src="images/hero-tibet.jpg" alt="Mountains and Tibetan flag" />
-      <div class="hero-text">
-        <h2>A Journey Through Escape, Struggle, and Resilience</h2>
-        <p>Explore the story of a Tibetan refugee who crossed borders, built digital futures, and aspiring to empower his community through computing.</p>
-      </div>
-    </section>
+  <div class="progress-bar" id="progress-bar"></div>
+  <nav>
+    <a href="#intro">Intro</a>
+    <a href="#school">Growing up in Exile</a>
+    <a href="#speaking-up">Speaking Up</a>
+    <a href="#finding-way">Finding My Way</a>
+    <a href="#escape">Visual Journey</a>
+  </nav>
 
-    <section class="intro">
-      <h3>Where will you begin?</h3>
-      <div class="nav-cards">
-        <div class="card">
-          <a href="escape.html">
-            <h4>Escape</h4>
-            <p>The perilous journey from Tibet across the Himalayas.</p>
-          </a>
+  <!-- Section placeholders -->
+  <section id="intro" data-aos="fade-up">
+  <div class="hero">
+    <img src="images/hero-tibet.jpg" alt="Mountains and Tibetan flag" style="width:100%; border-radius: 8px;"/>
+    <div class="hero-text" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; color:white; text-shadow: 1px 1px 6px black;">
+      <h2>One Story, Many Paths</h2>
+      <p>From a small village in Tibet to classrooms and code across the world, this is the journey of a child who carried his people’s hopes across borders—learning, growing, and finding ways to give back.</p>
+    </div>
+  </div>
+
+  <div id="dice-intro">
+    <center>
+      <h2>Where will you begin?</h2>
+      <p>Click the dice to roll and explore a part of the journey:</p>
+      <div class="dice-wrapper">
+        <div class="nav-card">
+          <a href="trace-journey/trace.html">🗺️ Trace Route Game</a>
         </div>
-        <div class="card">
-          <a href="exile.html">
-            <h4>Exile Life</h4>
-            <p>Growing up in a refugee school and forging an identity in exile.</p>
-          </a>
-        </div>
-        <div class="card">
-          <a href="activism.html">
-            <h4>Activism</h4>
-            <p>Standing up for justice through journalism and protest.</p>
-          </a>
-        </div>
-        <div class="card">
-          <a href="future.html">
-            <h4>Future</h4>
-            <p>Creating meaningful CS education for Tibetan youth.</p>
-          </a>
+        <div class="dice-button" id="dice">🎲</div>
+        <div class="nav-card">
+          <a href="mission/mission-game.html">🎮 Adventure Game</a>
         </div>
       </div>
+      <div id="dice-result" class="result-icon"></div>
+    </center>
+  </div>
+
+  <div class="quote" style="margin-top: 3rem; font-style: italic; text-align: center; color: #444;">
+    “Our struggle must remain alive through knowledge, culture, and digital courage.”<br />
+    — His Holiness the 14th Dalai Lama
+  </div>
+</section>
+  <section id="school" data-aos="fade-up" class="section-padded school-bg">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h2>School in Exile</h2>
+      <p style="font-style: italic; color: #666;">
+        “Education is the key to our survival.” — H.H. the Dalai Lama
+      </p>
+    </div>
+
+    <div style="max-width: 800px; margin: auto;">
+      <p>
+        My new life began in Mussoorie, at the Tibetan Homes School. It wasn’t just a place to learn reading or math—it was where I learned what it meant to be Tibetan. Every morning started with the national anthem, not of the country I lived in, but of the homeland I had left behind. We celebrated Losar, read Tibetan poetry, and listened to the teachings of His Holiness the Dalai Lama.
+      </p>
+
+      <p>
+        This school, like many others across India and Nepal, was set up by the Tibetan community in exile. The goal was not just to give us an education, but to make sure we never forgot who we were. We studied English and science, but we also learned Tibetan language, history, and values—things that kept our identity alive even when we were far from home.
+      </p>
+
+      <p>
+        I grew up in a group home with other children who had taken the same journey I had. We called our caregivers <em>Ama</em> and <em>Aba</em>—mother and father. They weren’t our parents by blood, but they gave us love and a sense of belonging. That small family, along with our teachers and friends, helped us grow up strong, even though many of us had arrived in India with nothing.
+      </p>
+
+      <div style="margin-top: 2rem; background: #282c34; color: #dcdcdc; padding: 1rem; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.95rem;">
+        <pre><code>let dailyRoutine = ["Wake up", "Prayer", "Class", "Lunch", "Study", "Sleep"];
+        dailyRoutine.forEach(activity => console.log(activity));</code></pre>
+      </div>
+
+      <div class="quote" style="margin-top: 2rem; font-style: italic; border-left: 4px solid #ccc; padding-left: 1rem; color: #555;">
+        “We Tibetans lost our land, but not our will to be Tibetan.” — Common exile saying
+      </div>
+    </div>
+  </section>
+  <section id="speaking-up" data-aos="fade-up" class="section-padded" style="background: #fdfdfd;">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h2>Speaking Up, Giving Back</h2>
+        <p style="font-style: italic; color: #666;">
+          “When we lift others, we lift ourselves.”
+        </p>
+      </div>
+
+      <div style="max-width: 800px; margin: auto;">
+        <p>
+          My journey of speaking up began at the Tibetan Homes School in Mussoorie, where I started a group with friends called the <strong>Students General Improvement Group (SGIG)</strong>. We weren’t doing anything big—we just wanted to help each other do better, study harder, and show up for one another. It was about believing that even as students, we could shape the way we lived and learned.
+        </p>
+
+        <p>
+          That same spirit came with me to college in Bengaluru. There, I tried to bring Tibetan students together, to make sure we didn’t lose touch with our roots. We organized events, held gatherings, and reminded each other why it mattered to stay connected to our language and our community—even when the city around us felt like a different world.
+        </p>
+
+        <p>
+          Later, while working with the <strong>Tibetan government-in-exile</strong>, I helped lead a project to build our first <strong>digital demographic system</strong>. The goal was simple: help us stay connected as a people scattered around the world. What started as a technical task became something much more—it was a way of telling every Tibetan: “You matter. We see you.” That work led to a deeply meaningful moment: a personal audience with His Holiness the Dalai Lama.
+        </p>
+
+        <div class="quote" style="margin-top: 2rem; font-style: italic; border-left: 4px solid #ccc; padding-left: 1rem; color: #555;">
+          “We are a small nation, but our voice is strong when we speak for each other.”
+        </div>
+      </div>
     </section>
+  <section id="finding-way" data-aos="fade-up" class="section-padded finding-way-bg">
+  <div style="text-align: center; margin-bottom: 3rem;">
+    <h2>Finding My Way Forward</h2>
+    <p style="font-style: italic; color: #666;">
+      “The path may be long, but every step matters.”
+    </p>
+  </div>
 
-    <section class="quote">
-      <blockquote>
-        “Our struggle must remain alive through knowledge, culture, and digital courage.”<br />
-        — His Holiness the 14th Dalai Lama
-      </blockquote>
-    </section>
-  </main>
+  <div style="max-width: 800px; margin: auto;">
+    <p>
+      During my time in Bengaluru, I started something new—something that felt both risky and necessary. I founded <strong><a href="https://tibetanjournal.com" target="_blank">TibetanJournal.com</a></strong>, an online platform for Tibetan news and voices. I wanted to make sure the world heard about our struggles, our achievements, our questions. We didn’t have to wait for others to tell our stories—we could tell them ourselves.
+    </p>
 
-  <div id="site-footer"></div>
+    <p>
+      Later, I was honored to receive the <strong>Tibetan Scholarship Program</strong> from the U.S. State Department. That brought me to Buffalo, New York, where I studied <strong>Computer Science and Engineering</strong>. I never thought I’d be here—so far from home, and yet still carrying it with me. In 2023, I received the <strong>Patricia Eberlein Best Thesis Award</strong> for my work, and it gave me strength to keep going.
+    </p>
 
+    <p>
+      Now, as a <strong>Presidential Fellow</strong> pursuing a Ph.D. in education, I focus on helping displaced and marginalized students—especially Tibetan youth—learn computing in ways that honor their culture and stories. For me, code is not just technology. It’s a new language for an old dream: to help our people stay strong, seen, and connected.
+    </p>
+
+    <div class="quote" style="margin-top: 2rem; font-style: italic; border-left: 4px solid #ccc; padding-left: 1rem; color: #555;">
+      “Exile gave me purpose. Learning gave me tools. Together, they gave me direction.”
+    </div>
+  </div>
+</section>
+
+
+  <!-- Escape Journey with Real Map -->
+  <section id="escape" data-aos="fade-up" class="section-padded" style="background: #f5f5f5;">
+    <div style="max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; gap: 2rem;">
+      <div style="flex: 1 1 500px;">
+        <div id="escape-map"></div>
+      </div>
+      <div style="flex: 1 1 400px;">
+        <h2>Escape Journey</h2>
+        <p><em>“Some journeys begin with goodbye.”</em></p>
+        <div id="story-text" style="font-size: 1rem; line-height: 1.6;"></div>
+      </div>
+    </div>
+  </section>
+    <footer>
+      &copy; 2025 Yeshi Paljor. Built with love to honor the Tibetan journey. Visit <a href="https://yeshipal.github.io">yeshipal.github.io</a> for more.
+    </footer>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    fetch('components/header.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('site-header').innerHTML = data;
-      });
-    fetch('components/footer.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('site-footer').innerHTML = data;
-      });
+    AOS.init();
+    window.addEventListener('scroll', () => {
+      const scrollProgress = document.getElementById('progress-bar');
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = scrollPercent + '%';
+    });
+      const dice = document.getElementById("dice");
+    const result = document.getElementById("dice-result");
+    const sections = [
+      { icon: "🧭", label: "Escape", target: "#escape" },
+      { icon: "🏫", label: "School in Exile", target: "#school" },
+      { icon: "📣", label: "Speaking Up", target: "#speaking-up" },
+      { icon: "💡", label: "Finding My Way", target: "#finding-way" }
+    ];
+
+    dice.addEventListener("click", () => {
+      const roll = Math.floor(Math.random() * 4);
+      const choice = sections[roll];
+      result.innerHTML = `${choice.icon} <strong>${choice.label}</strong>`;
+      setTimeout(() => {
+        document.querySelector(choice.target).scrollIntoView({ behavior: "smooth" });
+      }, 1000);
+    });
+
+    const map = L.map('escape-map', { scrollWheelZoom: false }).setView([30, 50], 3);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const journey = [
+  {
+    name: "Aba",
+    coords: [32.5, 102.5],
+    story: "My journey began in Eastern Tibet with my semi-nomadic family. I was just a child, too young to understand the weight of goodbye—but old enough to feel it. As political pressures mounted, my father made the impossible choice to send me away for a future he couldn’t promise at home."
+  },
+  {
+    name: "Lhasa",
+    coords: [29.65, 91.10],
+    story: "Passing through Lhasa, we moved quietly. The city—once our spiritual and cultural center—was heavily watched. Even as a child, I could sense the silence in the air, the way history was being hidden in plain sight."
+  },
+  {
+    name: "Zhangmu",
+    coords: [27.97, 85.97],
+    story: "At the border town of Zhangmu, we crossed in the dark. Each step down the mountain trails was steeped in fear and urgency. For many, this path marked the line between survival and loss."
+  },
+  {
+    name: "Kathmandu",
+    coords: [27.70, 85.30],
+    story: "In Kathmandu, we waited at the Tibetan Reception Centre. It was a temporary shelter, but it carried hope. I met other children who had crossed like me—each of us carrying fragments of home in our hearts."
+  },
+  {
+    name: "Delhi",
+    coords: [28.66, 77.23],
+    story: "Delhi was our first real stop in India. In the bustling settlement of Majnu Ka Tilla, I tasted exile not as an idea, but as a lived condition—a mix of longing and resilience wrapped in community warmth."
+  },
+  {
+    name: "Dharamshala",
+    coords: [32.22, 76.32],
+    story: "Dharamshala gave us grounding. It wasn’t just the seat of our government-in-exile, but a place where the voice of His Holiness the Dalai Lama reminded us to turn pain into purpose, and loss into learning."
+  },
+  {
+    name: "Mussoorie",
+    coords: [30.45, 78.07],
+    story: "Mussoorie became home. At Tibetan Homes School, we didn’t just memorize lessons—we carried our culture in morning assemblies, in Losar songs, and in shared laughter with children who became family."
+  },
+  {
+    name: "Bengaluru",
+    coords: [12.97, 77.59],
+    story: "In Bengaluru, I began to find my voice. Away from the familiar, I immersed myself in computer science—and found new ways to tell our stories. It’s here I realized that code, too, could carry memory and meaning."
+  },
+  {
+    name: "Buffalo",
+    coords: [42.89, -78.87],
+    story: "Buffalo became the latest chapter, where I now study and teach. Here, I weave our history into education and design computing programs that reflect not just what we know—but who we are."
+  }
+];
+
+
+    const walkerIcon = L.icon({
+      iconUrl: 'images/walker.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+
+    const walker = L.marker(journey[0].coords, { icon: walkerIcon }).addTo(map);
+    let step = 0;
+    const storyText = document.getElementById("story-text");
+
+    function updateWalker(index = null) {
+      if (index !== null) {
+        step = index;
+        autoLoop = false;
+        clearInterval(interval);
+        lastInteractionTime = Date.now();
+      }
+
+      if (step >= journey.length) step = 0;
+      const point = journey[step];
+      walker.setLatLng(point.coords);
+      storyText.innerHTML = `<p><strong>${point.name}</strong>: ${point.story}</p>`;
+      step++;
+    }
+
+    updateWalker();
+    let autoLoop = true;
+    let interval = setInterval(updateWalker, 2000);
+    let lastInteractionTime = Date.now();
+    // Resume auto-loop on scroll if it was paused
+    window.addEventListener('scroll', () => {
+      const now = Date.now();
+      if (!autoLoop && now - lastInteractionTime > 1000) {
+        autoLoop = true;
+        interval = setInterval(updateWalker, 5000);
+      }
+    });
+
+    journey.forEach((stop, idx) => {
+      L.marker(stop.coords)
+        .addTo(map)
+        .bindPopup(stop.name)
+        .on('click', () => {
+          updateWalker(idx); // jump to specific stop
+        });
+    });
+
   </script>
 </body>
 </html>
