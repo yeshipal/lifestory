@@ -257,6 +257,34 @@ section {
   font-style: italic;
   color: #555;
 }
+.quote-with-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding: 1rem 2rem;
+  background: #eee8dd;
+  font-style: italic;
+  color: #444;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.quote-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.quote-text {
+  max-width: 600px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
 
 /* ==== Footer ==== */
 footer {
