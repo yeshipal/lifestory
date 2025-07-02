@@ -1,17 +1,34 @@
-/* General Reset and Base Styles */
-body {
+/* ==== Base Reset and Typography ==== */
+html, body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
+  scroll-behavior: smooth;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   background: #fff8f0;
   color: #333;
 }
 
+/* ==== Header ==== */
 header {
   background: #8e2e2e;
   color: #fff;
   padding: 1rem 2rem;
   text-align: center;
+}
+
+/* ==== Navigation ==== */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 nav ul {
@@ -24,17 +41,42 @@ nav ul {
 }
 
 nav a {
-  color: #fff;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s;
+  color: #333;
 }
 
 nav a:hover {
-  color: #ffdd57;
+  color: #007BFF;
+  text-decoration: underline;
 }
 
-/* Hero Section */
+/* ==== Progress Bar ==== */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;
+  background: #007BFF;
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.2s ease;
+}
+
+/* ==== Sections ==== */
+section {
+  min-height: 100vh;
+  padding: 60px 20px;
+  box-sizing: border-box;
+  scroll-margin-top: 60px;
+}
+
+.section-padded {
+  padding: 60px 10vw;
+}
+
+/* ==== Hero Section ==== */
 .hero {
   position: relative;
   text-align: center;
@@ -63,16 +105,61 @@ nav a:hover {
 }
 
 .hero-text h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
-/* Intro Section */
-.intro {
-  padding: 2rem 1rem;
+.scroll-cue {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #fff;
+  animation: bounce 1.5s infinite;
+}
+
+/* ==== Dice Section ==== */
+#dice-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
   text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f9f9f9, #f1f7ff);
+  border-radius: 10px;
 }
 
+.dice-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.dice-button {
+  font-size: 80px;
+  cursor: pointer;
+  animation: bounce 2s infinite;
+  transition: transform 0.3s ease;
+}
+
+.dice-button:hover, .nav-card:hover {
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+}
+
+.dice-button:active {
+  transform: scale(0.95) rotate(45deg);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ==== Cards ==== */
 .nav-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -80,23 +167,25 @@ nav a:hover {
   margin-top: 1.5rem;
 }
 
-.card {
-  background: #fff;
-  border-radius: 10px;
+.nav-card, .card {
+  background: #f9f9f9;
   padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.card a {
+.nav-card a, .card a {
   text-decoration: none;
-  color: #333;
-  display: block;
+  font-weight: bold;
+  color: #007BFF;
 }
 
 .card h4 {
@@ -108,7 +197,59 @@ nav a:hover {
   font-size: 0.95rem;
 }
 
-/* Quote Section */
+/* ==== Themed Backgrounds ==== */
+.school-bg, .finding-way-bg {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  color: white;
+}
+
+.school-bg {
+  background-image: url('images/exile-background.png');
+}
+
+.finding-way-bg {
+  background-image: url('images/escape-hero.jpg');
+}
+
+.school-bg::before, .finding-way-bg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+
+.school-bg > *, .finding-way-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==== Map Section ==== */
+#escape-map {
+  height: 500px;
+  width: 100%;
+  margin-bottom: 2rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+#escapePath {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 3s linear;
+}
+
+#escapePath.animate {
+  stroke-dashoffset: 0;
+}
+
+/* ==== Quote Section ==== */
 .quote {
   background: #eee8dd;
   padding: 2rem 1rem;
@@ -117,29 +258,22 @@ nav a:hover {
   color: #555;
 }
 
+/* ==== Footer ==== */
 footer {
-  background: #4b2e2e;
-  color: #fff;
   text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
+  padding: 2rem 1rem;
+  margin-top: 4rem;
+  background: linear-gradient(to right, #f2f2f2, #e8f0ff);
   font-size: 0.9rem;
-}
-.scroll-cue {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  color: #fff;
-  animation: bounce 1.5s infinite;
-}
-#escapePath {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  transition: stroke-dashoffset 3s linear;
-}
-#escapePath.animate {
-  stroke-dashoffset: 0;
+  border-top: 1px solid #ddd;
+  color: #555;
 }
 
+footer a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
